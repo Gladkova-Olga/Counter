@@ -6,8 +6,8 @@ type ButtonPropsType = {
     disabled: boolean
 }
 
-export function Button(props: ButtonPropsType) {
-console.log('Button')
+export const Button = React.memo((props: ButtonPropsType) => {
+console.log(`Button ${props.title}`)
     const onClick = () => {
         props.onClick();
     }
@@ -21,4 +21,4 @@ console.log('Button')
 
 
     </>
-}
+})

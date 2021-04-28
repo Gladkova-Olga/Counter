@@ -7,7 +7,7 @@ type BoardPropsType = {
     active: boolean
 }
 
-export function Board(props: BoardPropsType) {
+export const Board = React.memo((props: BoardPropsType) => {
 console.log("Board")
     return (
         <div className={'board'}>
@@ -22,5 +22,5 @@ console.log("Board")
 
         </div>
     )
-}
+})
 

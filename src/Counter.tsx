@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import './Counter.css';
 import {Button} from "./components/Button";
 import {Board} from "./components/Board";
@@ -23,16 +23,15 @@ export function Counter() {
     const [error, setError] = useState<string>('')
     const [inputActive, setInputActive] = useState(false);
 
-    function addCount() {
-        // let action = addCountAC();
+    const addCount = useCallback(() => {
         dispatch(addCountAC());
-    }
+    },[dispatch])
 
-    function resetCount() {
+    const resetCount = useCallback(() => {
         dispatch(resetCountAC());
-    }
+    },[dispatch])
 
-    function changeCurrentMaxValue(newMaxValue: number) {
+    const changeCurrentMaxValue = useCallback((newMaxValue: number) => {
         if (newMaxValue > currentStartValue) {
             setCurrentMaxValue(newMaxValue);
             setError('')
@@ -40,9 +39,9 @@ export function Counter() {
             setError('Incorrect value!');
             setCurrentMaxValue(newMaxValue);
         }
-    }
+    },[])
 
-    function changeCurrentStartValue(newStartValue: number) {
+    const changeCurrentStartValue = useCallback((newStartValue: number) => {
         if (newStartValue >= 0 && newStartValue < currentMaxValue) {
             setCurrentStartValue(newStartValue);
             setError('')
@@ -50,20 +49,20 @@ export function Counter() {
             setError('Incorrect value!');
             setCurrentStartValue(newStartValue);
         }
-    }
+    },[])
 
-    function setMaxStartValues() {
+    const setMaxStartValues = useCallback(() => {
         if (!error) {
             dispatch(setMaxValueAC(currentMaxValue));
             dispatch(setStartValueAC(currentStartValue));
             dispatch(setCountAC(currentStartValue));
         }
         setInputActive(false)
-    }
+    }, [dispatch])
 
-    function changeFocusMaxInput() {
+    const changeFocusMaxInput = useCallback(() => {
         setInputActive(true)
-    }
+    }, [inputActive])
 
 
     return (

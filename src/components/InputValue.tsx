@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent} from 'react';
 
 type InputValuePropsType = {
     currentValue: number
@@ -7,7 +7,7 @@ type InputValuePropsType = {
     changeFocusInput: () => void
 }
 
-export function InputValue(props: InputValuePropsType) {
+export const InputValue = React.memo((props: InputValuePropsType) => {
     console.log('inputValue')
     const sendCurrentValue = (e: ChangeEvent<HTMLInputElement>) => props.sendCurrentValue(Math.floor(+e.currentTarget.value));
     const changeFocusInput = () => props.changeFocusInput();
@@ -24,5 +24,5 @@ export function InputValue(props: InputValuePropsType) {
             />
         </div>
     )
-}
+})
 
