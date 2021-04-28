@@ -8,7 +8,8 @@ type InputValuePropsType = {
 }
 
 export function InputValue(props: InputValuePropsType) {
-    const sendCurrentValue = (e: ChangeEvent<HTMLInputElement>) => props.sendCurrentValue(+e.currentTarget.value);
+    console.log('inputValue')
+    const sendCurrentValue = (e: ChangeEvent<HTMLInputElement>) => props.sendCurrentValue(Math.floor(+e.currentTarget.value));
     const changeFocusInput = () => props.changeFocusInput();
 
 

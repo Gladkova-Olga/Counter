@@ -7,7 +7,7 @@ type ButtonPropsType = {
 }
 
 export function Button(props: ButtonPropsType) {
-
+console.log('Button')
     const onClick = () => {
         props.onClick();
     }

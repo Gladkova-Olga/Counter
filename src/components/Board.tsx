@@ -8,7 +8,7 @@ type BoardPropsType = {
 }
 
 export function Board(props: BoardPropsType) {
-
+console.log("Board")
     return (
         <div className={'board'}>
             <div

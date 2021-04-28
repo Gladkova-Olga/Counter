@@ -3,57 +3,33 @@ import './Counter.css';
 import {Button} from "./components/Button";
 import {Board} from "./components/Board";
 import {InputValue} from "./components/InputValue";
-import {Inputs} from "./components/Inputs";
-import {Container, Grid, Paper} from "@material-ui/core";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "./state/store";
+import {
+    addCountAC,
+    InitialStateType,
+    resetCountAC,
+    setCountAC,
+    setMaxValueAC,
+    setStartValueAC
+} from "./state/counterReducer";
 
 
 export function Counter() {
-    const [maxValue, setMaxValue] = useState<number>(5)
-    const [startValue, setStartValue] = useState<number>(0)
-    const [count, setCount] = useState<number>(startValue);
-    const [currentMaxValue, setCurrentMaxValue] = useState<number>(maxValue);
-    const [currentStartValue, setCurrentStartValue] = useState<number>(startValue);
+    let values = useSelector<AppRootStateType, InitialStateType>(state => state.counter);
+    let dispatch = useDispatch()
+    const [currentMaxValue, setCurrentMaxValue] = useState<number>(values.maxValue);
+    const [currentStartValue, setCurrentStartValue] = useState<number>(values.startValue);
     const [error, setError] = useState<string>('')
     const [inputActive, setInputActive] = useState(false);
 
-    useEffect(() => {
-        let maxValueAsString = localStorage.getItem('maxValue')
-        if (maxValueAsString) {
-            let newMaxValue = JSON.parse(maxValueAsString)
-            setMaxValue(newMaxValue)
-            setCurrentMaxValue(newMaxValue)
-
-        }
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem('maxValue', JSON.stringify(maxValue))
-    }, [maxValue])
-
-    useEffect(() => {
-        let startValueAsString = localStorage.getItem('startValue')
-        if (startValueAsString) {
-            let newStartValue = JSON.parse(startValueAsString)
-            setStartValue(newStartValue)
-            setCurrentStartValue(newStartValue)
-            setCount(newStartValue)
-
-        }
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem('startValue', JSON.stringify(startValue))
-    }, [startValue])
-
-
     function addCount() {
-        if (count < maxValue) {
-            setCount(count + 1);
-        }
+        // let action = addCountAC();
+        dispatch(addCountAC());
     }
 
     function resetCount() {
-        setCount(startValue);
+        dispatch(resetCountAC());
     }
 
     function changeCurrentMaxValue(newMaxValue: number) {
@@ -78,9 +54,9 @@ export function Counter() {
 
     function setMaxStartValues() {
         if (!error) {
-            setMaxValue(currentMaxValue);
-            setStartValue(currentStartValue);
-            setCount(currentStartValue);
+            dispatch(setMaxValueAC(currentMaxValue));
+            dispatch(setStartValueAC(currentStartValue));
+            dispatch(setCountAC(currentStartValue));
         }
         setInputActive(false)
     }
@@ -92,12 +68,8 @@ export function Counter() {
 
     return (
         <div className={'CounterPage'}>
-
-
             <div className={'Counter'}>
-
                 <div className={'Inputs'}>
-
                     <div className={'InputAndTitle'}>
                         <span className={'Title'}>Max value: </span>
 
@@ -129,82 +101,21 @@ export function Counter() {
 
             <div className={'Counter'}>
                 <Board
-                    count={count}
-                    maxValue={maxValue}
+                    count={values.count}
+                    maxValue={values.maxValue}
                     message={error ? error : 'Press set'}
                     active={inputActive}
                 />
 
-
                 <Button title={'inc'}
                         onClick={addCount}
-                        disabled={count === maxValue || !!error}
+                        disabled={values.count === values.maxValue || !!error}
                 />
                 <Button title={'reset'}
                         onClick={resetCount}
-                        disabled={count === startValue}
+                        disabled={values.count === values.startValue}
                 />
             </div>
-
-
-            {/*<table className={'Table'}>*/}
-            {/*    <tbody>*/}
-            {/*    <tr>*/}
-            {/*        <td>*/}
-            {/*            <tr>*/}
-            {/*                <td>Max value:</td>*/}
-            {/*                <td>*/}
-            {/*                    <InputValue*/}
-            {/*                        currentValue={currentMaxValue}*/}
-            {/*                        sendCurrentValue={changeCurrentMaxValue}*/}
-            {/*                        error={!!error}  //{error ? true : false}*/}
-            {/*                        changeFocusInput={changeFocusMaxInput}*/}
-            {/*                    />*/}
-            {/*                </td>*/}
-            {/*            </tr>*/}
-            {/*            <tr>*/}
-            {/*                <td>Start value:</td>*/}
-            {/*                <td>*/}
-            {/*                    <InputValue*/}
-            {/*                        currentValue={currentStartValue}*/}
-            {/*                        sendCurrentValue={changeCurrentStartValue}*/}
-            {/*                        error={!!error} //{error ? true : false}*/}
-            {/*                        changeFocusInput={changeFocusMaxInput}*/}
-            {/*                    />*/}
-            {/*                </td>*/}
-            {/*            </tr>*/}
-            {/*        </td>*/}
-            {/*        <th>*/}
-            {/*            <Board*/}
-            {/*                count={count}*/}
-            {/*                maxValue={maxValue}*/}
-            {/*                message={error ? error : 'Set'}*/}
-            {/*                active={inputActive}*/}
-            {/*            />*/}
-            {/*        </th>*/}
-            {/*    </tr>*/}
-            {/*    <tr>*/}
-            {/*        <th><Button title={'set'}*/}
-            {/*                    onClick={setMaxStartValues}*/}
-            {/*                    disabled={!!error} //error ? true : false*/}
-            {/*        />*/}
-            {/*        </th>*/}
-            {/*        <td>*/}
-
-            {/*            <Button title={'inc'}*/}
-            {/*                    onClick={addCount}*/}
-            {/*                    disabled={count === maxValue || error ? true : false}*/}
-            {/*            />*/}
-            {/*            <Button title={'reset'}*/}
-            {/*                    onClick={resetCount}*/}
-            {/*                    disabled={count === startValue}*/}
-            {/*            />*/}
-            {/*        </td>*/}
-            {/*    </tr>*/}
-            {/*    </tbody>*/}
-            {/*</table>*/}
-
-
         </div>
     )
 
